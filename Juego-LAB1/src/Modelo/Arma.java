@@ -25,7 +25,7 @@ public class Arma extends Artefacto {
         //super.imprimirNVeces(" ", 30);
         System.out.print("Arma: "+super.getNombre());
         //super.imprimirNVeces(" ", 10);
-        System.out.print(" Daño:"+danoMin +"-"+ danoMax);
+        System.out.print(" Dano:"+danoMin +"-"+ danoMax);
         for (int i=0;i<10;i++)
             System.out.print(" ");
         //super.imprimirNVeces(" ", 30);

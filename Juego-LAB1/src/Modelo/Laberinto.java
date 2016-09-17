@@ -134,7 +134,7 @@ public class Laberinto {
         }
     }
 
-    public void añadirElementos(int n) {
+    public void anadirElementos(int n) {
         Integer numDisp = dentro.size();
         List<Integer> index = new ArrayList<>();
         for (int i = 0; i < numDisp; i++) {

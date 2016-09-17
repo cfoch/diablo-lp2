@@ -133,7 +133,7 @@ public class Juego {
             Integer fils=Myrandom(limiteInicial,limiteFinal);
             Integer cols=Myrandom(limiteInicial,limiteFinal);
             Laberinto lab=gestor.crear(fils,cols);
-            lab.añadirElementos(i+1);        
+            lab.anadirElementos(i+1);        
             mundo.add(lab);
             limiteInicial+=1;limiteFinal+=1;
         }
