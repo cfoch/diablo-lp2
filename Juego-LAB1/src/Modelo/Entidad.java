@@ -25,12 +25,30 @@ public class Entidad {
     private Integer vidamax;
     private Integer vida;
 
-    public Entidad(Integer nivel, String nombre,Integer vidamax) {
+    public Entidad(Integer x, Integer y, Integer nivel, String nombre,Integer vidamax) {
+        this.x = x;
+        this.y = y;
         this.nivel = nivel;
         this.nombre = nombre;
         this.direccion='S';
         this.vidamax=vida=vidamax;
     } 
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
 
     public Integer getNivel() {
         return nivel;

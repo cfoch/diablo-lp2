@@ -166,15 +166,23 @@ public class Laberinto {
         }
     }
 
+    /**
+     * Borra un artefacto del laberinto en la posicion (x, y)
+     *
+     * @param  x    la posicion en x
+     * @param  y    la posicion en y
+     * @return      un artefacto o null en caso de error
+     */
     public Artefacto extraerArtefacto(Integer x, Integer y) {
-        Celda.Tipo t = getCelda(x, y).getTipo();
-        if (t <= 5) {
-            return null;//retorna null para indicar operacion invalida en la funcion que lo llamo        
-        }
+        Celda celda = getCelda(x, y);
+
+        if (!celda.esArtefacto())
+            return null;
+
         Class c;
-        if (t == 6) {
+        if (celda.getTipo() == Celda.Tipo.ARMA) {
             c = Arma.class;
-        } else if (t == 7) {
+        } else if (celda.getTipo() == Celda.Tipo.ARMADURA) {
             c = Armadura.class;
         } else {
             c = PocionCuracion.class;
@@ -186,7 +194,7 @@ public class Laberinto {
             if (a.getClass().equals(c)) {
                 if (a.getX() == x && a.getY() == y) {
                     artefactos.remove(a);
-                    cambiarTipo(x, y, Celda.Tipo.DENTRO);
+                    cambiarTipo(x, y, Celda.Tipo.ADENTRO);
                     return a;
                 }
             }
@@ -200,7 +208,7 @@ public class Laberinto {
             Entidad e=iterator.next();        
                 if(e.getX() == x && e.getY()==y){
                     enemigos.remove(e);
-                    cambiarTipo(x,y,Celda.Tipo.DENTRO);
+                    cambiarTipo(x,y,Celda.Tipo.ADENTRO);
                     return e;
                 }                
         }  
@@ -218,15 +226,15 @@ public class Laberinto {
         return null;        
     }
 
-    public Celda.Tipo comprobarTipo(Integer x, Integer y) {
+    public int comprobarTipo(Integer x, Integer y) {
         Celda.Tipo tipo;
         tipo = getCelda(x, y).getTipo();
-        if (tipo == Celda.PARED || tipo == Celda.ENEMIGO ||
-            tipo == Celda.ARMA || tipo == Celda.ARMADURA ||
-            tipo == Celda.POCION) { // SIN EL ENEMIGO AHORA CON EL
+        if (tipo == Celda.Tipo.PARED || tipo == Celda.Tipo.ENEMIGO ||
+            tipo == Celda.Tipo.ARMA || tipo == Celda.Tipo.ARMADURA ||
+            tipo == Celda.Tipo.POCION) { // SIN EL ENEMIGO AHORA CON EL
             return -1;
         }
-        return tipo;
+        return tipo.ordinal();
     }
     
     
@@ -330,8 +338,8 @@ public class Laberinto {
                 }
             }
             if (respuesta != -1) {
-                cambiarTipo(posX, posY, 2);
-                cambiarTipo(enemigos.get(i).getX(), enemigos.get(i).getY(), 5);
+                cambiarTipo(posX, posY, Celda.Tipo.AFUERA);
+                cambiarTipo(enemigos.get(i).getX(), enemigos.get(i).getY(), Celda.Tipo.ENEMIGO);
             }            
         }
     }

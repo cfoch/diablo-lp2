@@ -75,24 +75,44 @@ public class Celda {
         this.tipo = tipo;
     }
 
+    public boolean esArtefacto() {
+        boolean ret;
+        switch (tipo) {
+            case ARMA:
+            case ARMADURA:
+            case POCION:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public void imprimir() {
         switch(tipo){
-            case 0: System.out.print("#");  // PARED
-                    break;
-            case 2: System.out.print(" ");  // DENTRO
-                    break;
-            case 3: System.out.print("-");  // ANTERIOR
-                    break;
-            case 4: System.out.print("+");  // SIGUIENTE
-                    break;
-            case 5: System.out.print("E");  // ENEMIGO
-                    break;
-            case 6: System.out.print("A");  // ARMA
-                    break;
-            case 7: System.out.print("A");  // ARMADURA
-                    break;
-            case 8: System.out.print("A");  // POCION
-                    break;
+            case PARED:
+                System.out.print("#");  // PARED
+                break;
+            case ADENTRO:
+                System.out.print(" ");  // DENTRO
+                break;
+            case MUNDO_ANTERIOR:
+                System.out.print("-");  // ANTERIOR
+                break;
+            case MUNDO_SIGUIENTE:
+                System.out.print("+");  // SIGUIENTE
+                break;
+            case ENEMIGO:
+                System.out.print("E");  // ENEMIGO
+                break;
+            case ARMA:
+                System.out.print("A");  // ARMA
+                break;
+            case ARMADURA:
+                System.out.print("A");  // ARMADURA
+                break;
+            case POCION:
+                System.out.print("A");  // POCION
+                break;
         }  
     }
 

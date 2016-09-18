@@ -122,7 +122,7 @@ public class Juego {
             Integer difY = avatar.getVariacionY();
             Integer newX = avatar.getX() + difX;
             Integer newY = avatar.getY() + difY;
-            if (laberinto.getCelda(newX, newY).getTipo()==6||laberinto.getCelda(newX, newY).getTipo()==7||laberinto.getCelda(newX, newY).getTipo()==8){
+            if (laberinto.getCelda(newX, newY).esArtefacto()){
                 // es artefacto
                 Artefacto a = laberinto.extraerArtefacto(newX, newY);
                 if (a != null) {
@@ -130,7 +130,7 @@ public class Juego {
                     avatar.getSaco().addArtefacto(a);
                 }
             }
-            if (laberinto.getCelda(newX, newY).getTipo()==5){
+            if (laberinto.getCelda(newX, newY).getTipo()==Celda.Tipo.ENEMIGO){
                 // es enemigo
                 // batalla que deberia 
                 iniciarBatalla(avatar,newX,newY); 
