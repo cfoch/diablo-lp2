@@ -9,22 +9,25 @@ package Modelo;
  *
  * @author 
  */
+
 public class Celda {
+    static public enum Tipo {
+        PARED,
+        AFUERA, // Fuera del mapa.
+        ADENTRO,
+        MUNDO_ANTERIOR,
+        MUNDO_SIGUIENTE,
+        ENEMIGO,
+        ARMA,
+        ARMADURA,
+        POCION
+    };
 
     private Integer x;
     private Integer y;
-    private Integer tipo;
-    // 0 PARED
-    // 1 AFUERA
-    // 2 DENTRO
-    // 3 ANTERIOR
-    // 4 SIGUIENTE
-    // 5 ENEMIGO
-    // 6 ARMA
-    // 7 ARMADURA
-    // 8 POCION
+    private Tipo tipo;
 
-    public Celda(Integer x, Integer y, Integer tipo) {
+    public Celda(Integer x, Integer y, Tipo tipo) {
         this.x = x;
         this.y = y;
         this.tipo = tipo;
@@ -61,14 +64,14 @@ public class Celda {
     /**
      * @return the tipo
      */
-    public Integer getTipo() {
+    public Tipo getTipo() {
         return tipo;
     }
 
     /**
      * @param tipo the tipo to set
      */
-    public void setTipo(Integer tipo) {
+    public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
 

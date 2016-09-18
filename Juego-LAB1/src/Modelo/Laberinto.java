@@ -32,7 +32,7 @@ public class Laberinto {
         return lista.get(0);
     }
 
-    public Laberinto(Integer m, Integer n, Integer tipo) {
+    public Laberinto(Integer m, Integer n, Celda.Tipo tipo) {
         filas = 2 * m + 1;
         columnas = 2 * n + 1;
         celdas = new Celda[filas][columnas];
@@ -43,7 +43,7 @@ public class Laberinto {
         }
     }
 
-    public void pintarArea(Integer x, Integer y, Integer x1, Integer y1, Integer tipo) {
+    public void pintarArea(Integer x, Integer y, Integer x1, Integer y1, Celda.Tipo tipo) {
         Integer xI, xF, yI, yF;
         xI = x;
         yI = y;
@@ -63,7 +63,7 @@ public class Laberinto {
 
     }
 
-    public void pintarCelda(Integer x, Integer y, Integer tipo) {
+    public void pintarCelda(Integer x, Integer y, Celda.Tipo tipo) {
         celdas[x][y].setTipo(tipo);
     }
 
@@ -83,7 +83,7 @@ public class Laberinto {
     }
 
     public boolean esPared(Integer x, Integer y) {
-        return (celdas[x][y].getTipo() == 0);
+        return (celdas[x][y].getTipo() == Celda.Tipo.PARED);
     }
 
     public Integer getFilas() {
@@ -102,7 +102,7 @@ public class Laberinto {
         this.columnas = columnas;
     }
 
-    public void cambiarTipo(Integer x, Integer y, Integer tipo) {
+    public void cambiarTipo(Integer x, Integer y, Celda.Tipo tipo) {
         celdas[x][y].setTipo(tipo);
     }
 
@@ -147,27 +147,27 @@ public class Laberinto {
         for (i = 0; i < numEnemigos; i++) {
             Celda c = dentro.get(index.get(i));
             enemigos.add(new Enemigo(c.getX(), c.getY(), 0, i, "Tipo " + i));
-            cambiarTipo(c.getX(), c.getY(), 5);
+            cambiarTipo(c.getX(), c.getY(), Celda.Tipo.ENEMIGO);
         }
         for (; i < numEnemigos + numArmas; i++) {
             Celda c = dentro.get(index.get(i));
             artefactos.add(new Arma(c.getX(), c.getY(), i - numEnemigos, "Tipo " + (i - numEnemigos), Myrandom(5, 10), Myrandom(10, 15)));
-            cambiarTipo(c.getX(), c.getY(), 6);
+            cambiarTipo(c.getX(), c.getY(), Celda.Tipo.ARMA);
         }
         for (; i < numEnemigos + numArmas + numArmaduras; i++) {
             Celda c = dentro.get(index.get(i));
             artefactos.add(new Armadura(c.getX(), c.getY(), Myrandom(20, 30), i - (numEnemigos + numArmas), "Tipo " + (i - (numEnemigos + numArmas))));
-            cambiarTipo(c.getX(), c.getY(), 7);
+            cambiarTipo(c.getX(), c.getY(), Celda.Tipo.ARMADURA);
         }
         for (; i < numEnemigos + numArmas + numArmaduras + numPociones; i++) {
             Celda c = dentro.get(index.get(i));
             artefactos.add(new PocionCuracion(c.getX(), c.getY(), Myrandom(15, 25), i - (numEnemigos + numArmas + numArmaduras), "Tipo " + (i - (numEnemigos + numArmas + numArmaduras))));
-            cambiarTipo(c.getX(), c.getY(), 8);
+            cambiarTipo(c.getX(), c.getY(), Celda.Tipo.POCION);
         }
     }
 
     public Artefacto extraerArtefacto(Integer x, Integer y) {
-        Integer t = getCelda(x, y).getTipo();
+        Celda.Tipo t = getCelda(x, y).getTipo();
         if (t <= 5) {
             return null;//retorna null para indicar operacion invalida en la funcion que lo llamo        
         }
@@ -186,7 +186,7 @@ public class Laberinto {
             if (a.getClass().equals(c)) {
                 if (a.getX() == x && a.getY() == y) {
                     artefactos.remove(a);
-                    cambiarTipo(x, y, 2);
+                    cambiarTipo(x, y, Celda.Tipo.DENTRO);
                     return a;
                 }
             }
@@ -200,7 +200,7 @@ public class Laberinto {
             Entidad e=iterator.next();        
                 if(e.getX() == x && e.getY()==y){
                     enemigos.remove(e);
-                    cambiarTipo(x,y,2);
+                    cambiarTipo(x,y,Celda.Tipo.DENTRO);
                     return e;
                 }                
         }  
@@ -218,11 +218,15 @@ public class Laberinto {
         return null;        
     }
 
-    public Integer comprobarTipo(Integer x, Integer y) {
-        if (getCelda(x, y).getTipo() == 0 || getCelda(x, y).getTipo() == 5 || getCelda(x, y).getTipo() == 6 || getCelda(x, y).getTipo() == 7 || getCelda(x, y).getTipo() == 8) { // SIN EL ENEMIGO AHORA CON EL
+    public Celda.Tipo comprobarTipo(Integer x, Integer y) {
+        Celda.Tipo tipo;
+        tipo = getCelda(x, y).getTipo();
+        if (tipo == Celda.PARED || tipo == Celda.ENEMIGO ||
+            tipo == Celda.ARMA || tipo == Celda.ARMADURA ||
+            tipo == Celda.POCION) { // SIN EL ENEMIGO AHORA CON EL
             return -1;
         }
-        return getCelda(x, y).getTipo();
+        return tipo;
     }
     
     
@@ -254,7 +258,7 @@ public class Laberinto {
             newY = y + movs[index.get(i)][1];
 
             if (isValid(newX, newY, getFilas(), getColumnas())) {
-                if (getCelda(newX, newY).getTipo() == 1) {
+                if (getCelda(newX, newY).getTipo() == Celda.Tipo.AFUERA) {
                     return getCelda(newX, newY);
                 }
             }
@@ -265,11 +269,11 @@ public class Laberinto {
     public void addArtefacto(Artefacto a){
         artefactos.add(a);
         if (a.getClass()==Arma.class)
-            cambiarTipo(a.getX(),a.getY(),6);
+            cambiarTipo(a.getX(),a.getY(), Celda.Tipo.ARMA);
         if (a.getClass()==Armadura.class)
-            cambiarTipo(a.getX(),a.getY(),7);
+            cambiarTipo(a.getX(),a.getY(), Celda.Tipo.ARMADURA);
         if (a.getClass()==PocionCuracion.class)
-            cambiarTipo(a.getX(),a.getY(),8);
+            cambiarTipo(a.getX(),a.getY(), Celda.Tipo.POCION);
     
     }
 
