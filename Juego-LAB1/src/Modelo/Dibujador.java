@@ -65,7 +65,7 @@ public class Dibujador {
             System.out.println();
         }
         imprimirNVeces("_",2*B+5);  
-        avatar.imprimir();   
+        avatar.imprimirEntidad();   
         showInstruccions();
         showMessage(mensaje);
     }

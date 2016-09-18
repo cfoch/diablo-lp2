@@ -18,20 +18,39 @@ public class Arma extends Artefacto {
         this.danoMin=danomin;
         this.danoMax=danomax;
     }
-    @Override
+    
     public void imprimir(){
-        //super.imprimirNVeces("_", 20);
-        //System.out.println();
-        //super.imprimirNVeces(" ", 30);
         System.out.print("Arma: "+super.getNombre());
-        //super.imprimirNVeces(" ", 10);
         System.out.print(" Daño:"+danoMin +"-"+ danoMax);
         for (int i=0;i<10;i++)
-            System.out.print(" ");
-        //super.imprimirNVeces(" ", 30);
-        //System.out.println("Dano Max: "+danoMax);
-        //super.imprimirNVeces("_", 20);
-             
+            System.out.print(" ");             
     }
   
+    /**
+     * @return the danoMin
+     */
+    public Integer getDanoMin() {
+        return danoMin;
+    }
+
+    /**
+     * @param danoMin the danoMin to set
+     */
+    public void setDanoMin(Integer danoMin) {
+        this.danoMin = danoMin;
+    }
+
+    /**
+     * @return the danoMax
+     */
+    public Integer getDanoMax() {
+        return danoMax;
+    }
+
+    /**
+     * @param danoMax the danoMax to set
+     */
+    public void setDanoMax(Integer danoMax) {
+        this.danoMax = danoMax;
+    }
 }

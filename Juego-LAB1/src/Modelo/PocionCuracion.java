@@ -15,7 +15,6 @@ public class PocionCuracion extends Artefacto{
         super(x,y,tipo,nombre);
         this.puntos_vida=puntos_vida;
     }
-    @Override
     public void imprimir(){  
         //super.imprimirNVeces("_", 20);
         System.out.print("Pocion: "+super.getNombre()+" Curacion:"+getPuntos_vida());

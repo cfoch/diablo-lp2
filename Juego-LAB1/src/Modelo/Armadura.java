@@ -15,14 +15,20 @@ public class Armadura extends Artefacto{
         super(x,y,tipo,nombre);
         this.defensa=defensa;
     }
-     @Override
       public void imprimir(){
-        //super.imprimirNVeces("_", 20);
-        //super.imprimirNVeces(" ", 20);
-        System.out.print("Armadura: "+super.getNombre() +"; DF: "+defensa);
-//       super.imprimirNVeces(" ", 20);
-//        System.out.println("Defensa: "+defensa);
-//        super.imprimirNVeces("_", 20);                 
+        System.out.print("Armadura: "+super.getNombre() +"; DF: "+defensa);               
     }
-    
+    /**
+     * @return the defensa
+     */
+    public Integer getDefensa() {
+        return defensa;
+    }
+
+    /**
+     * @param defensa the defensa to set
+     */
+    public void setDefensa(Integer defensa) {
+        this.defensa = defensa;
+    }
 }

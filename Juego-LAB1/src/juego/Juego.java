@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-import Modelo.Avatar;
-import Modelo.Dibujador;
-import Controlador.GestorLaberinto;
-import Modelo.Artefacto;
-import Modelo.Laberinto;
+import Modelo.*;
+import Controlador.*;
 
 /**
  *
@@ -31,16 +28,43 @@ public class Juego {
         return lista.get(0); 
     }
     
+    private static void iniciarBatalla(Avatar a,Integer newX,Integer newY){
+        Entidad e =laberinto.extrarEnemigo(newX, newY);
+        String sufij="";
+        while (true){
+            a.imprimirEntidad();
+            e.imprimirEntidad();
+            Scanner sc = new Scanner(System.in);
+            String instruccion = sc.nextLine();
+            if (instruccion.length() >= movs[6].length()) 
+                sufij = instruccion.subSequence(0, movs[6].length()).toString();
+                
+            if (instruccion.compareTo("atacar")==0){
+                a.atacar(e);
+                e.atacar(a);                
+            } else if (sufij.compareTo(movs[6]) == 0) {
+                Integer n = Integer.parseInt(instruccion.replace(movs[6], "").trim().toString());
+                a.usar(n);
+            } else if (instruccion.compareTo("huir")==0)
+                break;
+            
+            if (e.getVida()==0){
+                laberinto.extrarEnemigo(newX, newY);
+                laberinto.addArtefacto(e.botarAleatorio());
+            }
+        }
+    }
+    
     
      private static Integer procesarInstruccion(String cadActual,Avatar avatar) {
         Integer respuesta = -1;       
-        String sufij;
+        String sufij="";
         //enter
-        /*if (cadActual.length() >= movs[6].length()) {
+        if (cadActual.length() >= movs[6].length()) {
             sufij = cadActual.subSequence(0, movs[6].length()).toString();
         } else {
             return -1;
-        }*/  //descomentar para el usar
+        }  //descomentar para el usar
 
         if (cadActual.compareTo(movs[0]) == 0) {
             return 3;
@@ -109,13 +133,15 @@ public class Juego {
             if (laberinto.getCelda(newX, newY).getTipo()==5){
                 // es enemigo
                 // batalla que deberia 
+                iniciarBatalla(avatar,newX,newY); 
+                return 0;
             }
                 
                 
-        } /*else if (sufij.compareTo(movs[6]) == 0) {
+        } else if (sufij.compareTo(movs[6]) == 0) {
             Integer n = Integer.parseInt(cadActual.replace(movs[6], "").trim().toString());
             respuesta = avatar.usar(n);
-        }*///descomentar para el usar
+        }//descomentar para el usar
         if (respuesta < 0) {
             return respuesta;  // si interactua con un objeto que no existe
                                // al moverme hacia una celda inválida
@@ -144,7 +170,7 @@ public class Juego {
         movs[3] = "S";  //ABAJO
         movs[4] = "W";  //ARRIBA
         movs[5] = "Q";  //INTERACTUAR
-        //movs[6] = "U";  //USAR N #, N ES LA POSICION DE UN ARTEFACTO EN EL SACO
+        movs[6] = "U";  //USAR N #, N ES LA POSICION DE UN ARTEFACTO EN EL SACO
         //descomentar para el usar
         Integer myWorld=0;
         int tamDibujadorX=15,tamDibujadorY=15;

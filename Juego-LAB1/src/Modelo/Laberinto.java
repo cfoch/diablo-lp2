@@ -16,7 +16,6 @@ public class Laberinto {
     private Integer columnas;
     Double pct_enemigo = Math.random() / 2;
     List<Integer> niveles_enemigo = new ArrayList<>();
-    ;
     Celda[][] celdas;
     private Celda inicio;
     private Celda fin;
@@ -142,8 +141,9 @@ public class Laberinto {
         }
         Collections.shuffle(index);
         int i;
-        //int numEnemigos = (int) (10 * pct_enemigo * n);
-        int numEnemigos = 100, numArmas = 3, numArmaduras = 1, numPociones = 2;
+        int numEnemigos = (int) (10 * pct_enemigo * n);
+        //int numEnemigos = 100;
+        int numArmas = 3, numArmaduras = 1, numPociones = 2;
         for (i = 0; i < numEnemigos; i++) {
             Celda c = dentro.get(index.get(i));
             enemigos.add(new Enemigo(c.getX(), c.getY(), 0, i, "Tipo " + i));
@@ -193,6 +193,30 @@ public class Laberinto {
         }
         return null;
     }
+    
+    public Entidad extrarEnemigo(Integer x,Integer y){
+        Iterator<Entidad> iterator = enemigos.iterator();        
+        while (iterator.hasNext()) {
+            Entidad e=iterator.next();        
+                if(e.getX() == x && e.getY()==y){
+                    enemigos.remove(e);
+                    cambiarTipo(x,y,2);
+                    return e;
+                }                
+        }  
+        return null;        
+    }
+    
+    public Entidad getEnemigo(Integer x,Integer y){
+        Iterator<Entidad> iterator = enemigos.iterator();        
+        while (iterator.hasNext()) {
+            Entidad e=iterator.next();        
+                if(e.getX() == x && e.getY()==y){                    
+                    return e;
+                }                
+        }  
+        return null;        
+    }
 
     public Integer comprobarTipo(Integer x, Integer y) {
         if (getCelda(x, y).getTipo() == 0 || getCelda(x, y).getTipo() == 5 || getCelda(x, y).getTipo() == 6 || getCelda(x, y).getTipo() == 7 || getCelda(x, y).getTipo() == 8) { // SIN EL ENEMIGO AHORA CON EL
@@ -236,6 +260,17 @@ public class Laberinto {
             }
         }
         return null;
+    }
+    
+    public void addArtefacto(Artefacto a){
+        artefactos.add(a);
+        if (a.getClass()==Arma.class)
+            cambiarTipo(a.getX(),a.getY(),6);
+        if (a.getClass()==Armadura.class)
+            cambiarTipo(a.getX(),a.getY(),7);
+        if (a.getClass()==PocionCuracion.class)
+            cambiarTipo(a.getX(),a.getY(),8);
+    
     }
 
     //----------
