@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 import Modelo.*;
 import Controlador.*;
+import Utils.Utils;
 
 /**
  *
@@ -19,15 +20,7 @@ import Controlador.*;
 public class Juego {
     private static Laberinto laberinto ;
      private static String[] movs = new String[10];
-        
-    private static Integer Myrandom(Integer ini,Integer fin){
-        List<Integer> lista= new ArrayList<>();
-        for (int i=ini;i<=fin;i+=1)
-            lista.add(i);
-        Collections.shuffle(lista);
-        return lista.get(0); 
-    }
-    
+
     private static void iniciarBatalla(Avatar a,Integer newX,Integer newY){
         Entidad e =laberinto.extrarEnemigo(newX, newY);
         String sufij="";
@@ -154,10 +147,10 @@ public class Juego {
         List<Laberinto> mundo= new ArrayList<>();
         GestorLaberinto gestor= new GestorLaberinto();
         Integer cantMinMundos=3,cantMaxMundos=7,limiteInicial=20,limiteFinal=25;
-        Integer cantMundos=Myrandom(cantMinMundos,cantMaxMundos);
+        Integer cantMundos=Utils.randInt(cantMinMundos,cantMaxMundos);
         for (int i=0;i<cantMundos;i++){
-            Integer fils=Myrandom(limiteInicial,limiteFinal);
-            Integer cols=Myrandom(limiteInicial,limiteFinal);
+            Integer fils=Utils.randInt(limiteInicial,limiteFinal);
+            Integer cols=Utils.randInt(limiteInicial,limiteFinal);
             Laberinto lab=gestor.crear(fils,cols);
             lab.añadirElementos(i+1);        
             mundo.add(lab);
@@ -192,7 +185,7 @@ public class Juego {
                 Scanner sc = new Scanner(System.in);
                 String instruccion = sc.nextLine();
                 Integer respuesta = procesarInstruccion(instruccion, a);
-                //direccionRandom = Myrandom(1,4); //----------
+                //direccionRandom = Utils.randInt(1,4); //----------
                 
                 laberinto.moverEnemigos(a.getX(),a.getY()); //----------
                 if (respuesta == 2 && myWorld == cantMundos - 1) {  // ganó (fin del juego)

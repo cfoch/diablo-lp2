@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import Utils.Utils;
+
 
 public class Laberinto {
 
@@ -23,14 +25,6 @@ public class Laberinto {
     List<Entidad> enemigos = new ArrayList<>();
     List<Artefacto> artefactos = new ArrayList<>();
 
-    private Integer Myrandom(Integer ini, Integer fin) {
-        List<Integer> lista = new ArrayList<>();
-        for (int i = ini; i <= fin; i += 1) {
-            lista.add(i);
-        }
-        Collections.shuffle(lista);
-        return lista.get(0);
-    }
 
     public Laberinto(Integer m, Integer n, Celda.Tipo tipo) {
         filas = 2 * m + 1;
@@ -151,17 +145,17 @@ public class Laberinto {
         }
         for (; i < numEnemigos + numArmas; i++) {
             Celda c = dentro.get(index.get(i));
-            artefactos.add(new Arma(c.getX(), c.getY(), i - numEnemigos, "Tipo " + (i - numEnemigos), Myrandom(5, 10), Myrandom(10, 15)));
+            artefactos.add(new Arma(c.getX(), c.getY(), i - numEnemigos, "Tipo " + (i - numEnemigos), Utils.randInt(5, 10), Utils.randInt(10, 15)));
             cambiarTipo(c.getX(), c.getY(), Celda.Tipo.ARMA);
         }
         for (; i < numEnemigos + numArmas + numArmaduras; i++) {
             Celda c = dentro.get(index.get(i));
-            artefactos.add(new Armadura(c.getX(), c.getY(), Myrandom(20, 30), i - (numEnemigos + numArmas), "Tipo " + (i - (numEnemigos + numArmas))));
+            artefactos.add(new Armadura(c.getX(), c.getY(), Utils.randInt(20, 30), i - (numEnemigos + numArmas), "Tipo " + (i - (numEnemigos + numArmas))));
             cambiarTipo(c.getX(), c.getY(), Celda.Tipo.ARMADURA);
         }
         for (; i < numEnemigos + numArmas + numArmaduras + numPociones; i++) {
             Celda c = dentro.get(index.get(i));
-            artefactos.add(new PocionCuracion(c.getX(), c.getY(), Myrandom(15, 25), i - (numEnemigos + numArmas + numArmaduras), "Tipo " + (i - (numEnemigos + numArmas + numArmaduras))));
+            artefactos.add(new PocionCuracion(c.getX(), c.getY(), Utils.randInt(15, 25), i - (numEnemigos + numArmas + numArmaduras), "Tipo " + (i - (numEnemigos + numArmas + numArmaduras))));
             cambiarTipo(c.getX(), c.getY(), Celda.Tipo.POCION);
         }
     }

@@ -90,28 +90,28 @@ public class Celda {
     public void imprimir() {
         switch(tipo){
             case PARED:
-                System.out.print("#");  // PARED
+                System.out.print("#");
                 break;
             case ADENTRO:
-                System.out.print(" ");  // DENTRO
+                System.out.print(" ");
                 break;
             case MUNDO_ANTERIOR:
-                System.out.print("-");  // ANTERIOR
+                System.out.print("-");
                 break;
             case MUNDO_SIGUIENTE:
-                System.out.print("+");  // SIGUIENTE
+                System.out.print("+");
                 break;
             case ENEMIGO:
-                System.out.print("E");  // ENEMIGO
+                System.out.print("E");
                 break;
             case ARMA:
-                System.out.print("A");  // ARMA
+                System.out.print("A");
                 break;
             case ARMADURA:
-                System.out.print("A");  // ARMADURA
+                System.out.print("A");
                 break;
             case POCION:
-                System.out.print("A");  // POCION
+                System.out.print("A");
                 break;
         }  
     }

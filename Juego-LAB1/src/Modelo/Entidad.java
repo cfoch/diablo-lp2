@@ -8,9 +8,10 @@ package Modelo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import Utils.Utils;
 /**
  *
- * @author 
+ * @author
  */
 public class Entidad {
 
@@ -32,7 +33,7 @@ public class Entidad {
         this.nombre = nombre;
         this.direccion='S';
         this.vidamax=vida=vidamax;
-    } 
+    }
 
     public Integer getX() {
         return x;
@@ -85,7 +86,7 @@ public class Entidad {
     public void setDireccion(char direccion) {
         this.direccion = direccion;
     }
-    
+
     public void showEntity(){
         System.out.print('X');
     }
@@ -131,7 +132,7 @@ public class Entidad {
     public void setSaco(Saco saco) {
         this.saco = saco;
     }
-    
+
 
     /**
      * @return the vidamax
@@ -160,7 +161,7 @@ public class Entidad {
     public void setVida(Integer vida) {
         this.vida = vida;
     }
-    
+
     public void imprimirEntidad() {
         if (this.getClass()==Avatar.class)
             System.out.print("Player Info");
@@ -191,13 +192,13 @@ public class Entidad {
             System.out.println();
         } else {
             System.out.println("Empty");
-            
+
         }
         System.out.println("Vida Max: " + vidamax);
         System.out.println("Vida : " + vida);
         System.out.println("Direccion : " + getDireccion());
-        System.out.println("Arma principal");        
-        if (arma!=null) {            
+        System.out.println("Arma principal");
+        if (arma!=null) {
             arma.imprimir();
         }
         else{
@@ -213,26 +214,19 @@ public class Entidad {
         if (this.getClass()==Avatar.class)
             getSaco().imprimir();
     }
-    
+
      private void imprimirNVeces(String l, Integer n) {
         for (int i = 0; i < n; i++) {
             System.out.print(l);
-        }        
+        }
     }
-     
+
      public void atacar(Entidad e){
          Integer daño=arma.getDanoMax()-e.getArmadura().getDefensa();
          e.setVida(Math.max(e.getVida() -daño,0));
      }
      public Artefacto botarAleatorio(){
-        return getSaco().getArtefacto(Myrandom(1,3));      
+        return getSaco().getArtefacto(Utils.randInt(1,3));
     }
-         
-    private static Integer Myrandom(Integer ini,Integer fin){
-        List<Integer> lista= new ArrayList<>();
-        for (int i=ini;i<=fin;i+=1)
-            lista.add(i);
-        Collections.shuffle(lista);
-        return lista.get(0); 
-    }
+
 }
