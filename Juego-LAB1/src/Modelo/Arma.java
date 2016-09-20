@@ -13,8 +13,7 @@ public class Arma extends Artefacto {
     Integer danoMin;
     Integer danoMax;
     
-    public Arma(Integer x,Integer y,Integer tipo,String nombre,Integer danomin,
-    		Integer danomax){
+    public Arma(Integer x,Integer y,Integer tipo,String nombre,Integer danomin,Integer danomax){
         super(x,y,tipo,nombre);
         this.danoMin=danomin;
         this.danoMax=danomax;

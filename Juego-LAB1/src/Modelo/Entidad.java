@@ -8,7 +8,7 @@ package Modelo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import Utils.Utils;
+
 /**
  *
  * @author
@@ -22,17 +22,32 @@ public class Entidad {
     private char direccion;
     private Arma arma;
     private Armadura armadura;
-    private Saco saco = new Saco();
+    private PocionCuracion pocion;
+    private Saco saco = new Saco(); 
     private Integer vidamax;
     private Integer vida;
 
-    public Entidad(Integer x, Integer y, Integer nivel, String nombre,Integer vidamax) {
+    public Entidad(Integer x, Integer y, Integer nivel, String nombre, Integer vidamax) {
         this.x = x;
         this.y = y;
         this.nivel = nivel;
         this.nombre = nombre;
-        this.direccion='S';
-        this.vidamax=vida=vidamax;
+        this.direccion = 'S';
+        this.vidamax = vida = vidamax;
+        generarSaco();
+    }
+
+    public void generarSaco() {
+        
+    }
+
+    private static Integer Myrandom(Integer ini, Integer fin) {
+        List<Integer> lista = new ArrayList<>();
+        for (int i = ini; i <= fin; i += 1) {
+            lista.add(i);
+        }
+        Collections.shuffle(lista);
+        return lista.get(0);
     }
 
     public Integer getX() {
@@ -87,11 +102,11 @@ public class Entidad {
         this.direccion = direccion;
     }
 
-    public void showEntity(){
+    public void showEntity() {
         System.out.print('X');
     }
 
-     /**
+    /**
      * @return the arma
      */
     public Arma getArma() {
@@ -133,7 +148,6 @@ public class Entidad {
         this.saco = saco;
     }
 
-
     /**
      * @return the vidamax
      */
@@ -162,11 +176,28 @@ public class Entidad {
         this.vida = vida;
     }
 
+    /**
+     * @return the pocion
+     */
+    public PocionCuracion getPocion() {
+        return pocion;
+    }
+
+    /**
+     * @param pocion the pocion to set
+     */
+    public void setPocion(PocionCuracion pocion) {
+        this.pocion = pocion;
+    }
+
     public void imprimirEntidad() {
-        if (this.getClass()==Avatar.class)
+        imprimirNVeces("-", 100);
+        System.out.println();
+        if (this.getClass() == Avatar.class) {
             System.out.print("Player Info");
-        else
+        } else {
             System.out.print("Enemigo");
+        }
         imprimirNVeces(" ", 20);
         System.out.print("Arma Principal");
         imprimirNVeces(" ", 15);
@@ -183,7 +214,7 @@ public class Entidad {
         if (getArma() != null) {
             getArma().imprimir();
         } else {
-            System.out.print("Empty");
+            System.out.print("Empty ");
             imprimirNVeces(" ", 25);
         }
 
@@ -191,42 +222,41 @@ public class Entidad {
             getArmadura().imprimir();
             System.out.println();
         } else {
-            System.out.println("Empty");
+            System.out.println("Empty ");
 
         }
         System.out.println("Vida Max: " + vidamax);
         System.out.println("Vida : " + vida);
         System.out.println("Direccion : " + getDireccion());
-        System.out.println("Arma principal");
-        if (arma!=null) {
-            arma.imprimir();
-        }
-        else{
-            System.out.print("Empty");
-        }
-         System.out.println("Armadura principal");
-        if (armadura != null) {
-            armadura.imprimir();
-        } else {
-            System.out.println("Empty");
-        }
-        imprimirNVeces("_", 20);
-        if (this.getClass()==Avatar.class)
-            getSaco().imprimir();
+        
+        System.out.println();
+        getSaco().imprimir();
+        imprimirNVeces("-", 100);
+        System.out.println();
+        System.out.println();
+
     }
 
-     private void imprimirNVeces(String l, Integer n) {
+    private void imprimirNVeces(String l, Integer n) {
         for (int i = 0; i < n; i++) {
             System.out.print(l);
         }
     }
 
-     public void atacar(Entidad e){
-         Integer daño=arma.getDanoMax()-e.getArmadura().getDefensa();
-         e.setVida(Math.max(e.getVida() -daño,0));
-     }
-     public Artefacto botarAleatorio(){
-        return getSaco().getArtefacto(Utils.randInt(1,3));
+    public void atacar(Entidad e) {
+        int dano=Myrandom(arma.getDanoMin(),arma.getDanoMax());
+        //dano> e.getArmadura().getDefensa(){
+        Integer daño = Math.max(dano - e.getArmadura().getDefensa(),0);
+        e.setVida(Math.max(e.getVida() - daño, 0));
+        //System.out.print(e.getVida());
+        //}
+    }
+
+    public Artefacto botarAleatorio() {
+        Artefacto art = getSaco().getArtefacto(Myrandom(1,2));
+        art.setX(x);
+        art.setY(y);
+        return art;
     }
 
 }

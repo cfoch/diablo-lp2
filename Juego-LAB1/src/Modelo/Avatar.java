@@ -5,6 +5,12 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+
 /**
  *
  * @author
@@ -12,11 +18,31 @@ package Modelo;
 public class Avatar extends Entidad {
 
     public Avatar(Integer x, Integer y, String nombre, Integer vidaMax) {
-        super(x, y, 0, nombre,vidaMax);        
+        super(x, y, 0, nombre, vidaMax);
+        Integer tipoArma = Myrandom(1, 3);
+        Arma arma = new Arma(getX(), getY(), tipoArma, "Tipo" + tipoArma, Myrandom(20, 40), Myrandom(40, 50));
+        Integer tipoArmadura = Myrandom(1, 3);
+        Armadura armadura = new Armadura(getX(), getY(), Myrandom(20, 30), tipoArmadura, "Tipo" + tipoArmadura);
+        
+        super.setArma(arma);
+        super.setArmadura(armadura);
+    }
+    
+    public void generarSaco() {
+        
+    }
+
+    private static Integer Myrandom(Integer ini, Integer fin) {
+        List<Integer> lista = new ArrayList<>();
+        for (int i = ini; i <= fin; i += 1) {
+            lista.add(i);
+        }
+        Collections.shuffle(lista);
+        return lista.get(0);
     }
     
     public void addArtefacto(Artefacto a) {
-         super.getSaco().addArtefacto(a);
+        super.getSaco().addArtefacto(a);
     }
 
     public Integer usar(Integer n) {
@@ -36,7 +62,7 @@ public class Avatar extends Entidad {
 
     private void curar(Artefacto a) {
         PocionCuracion pocion = (PocionCuracion) a;
-        super.setVida(Math.min(super.getVida() + pocion.getPuntos_vida(),super.getVidamax()));
+        super.setVida(Math.min(super.getVida() + pocion.getPuntos_vida(), super.getVidamax()));
     }
 
     private void armar(Artefacto a) {
@@ -45,13 +71,13 @@ public class Avatar extends Entidad {
             super.getSaco().addArtefacto(super.getArma());
         }
         super.setArma(_arma);
-        
+
     }
 
     private void defender(Artefacto a) {
         Armadura _armadura = (Armadura) a;
         if (super.getArmadura() != null) {
-             super.getSaco().addArtefacto(super.getArmadura());
+            super.getSaco().addArtefacto(super.getArmadura());
         }
         super.setArmadura(_armadura);
     }
@@ -75,5 +101,5 @@ public class Avatar extends Entidad {
         }
         return 0;
     }
-   
+
 }

@@ -45,6 +45,7 @@ public class Saco {
                 iterator.next().imprimir();
                 n++;
             }
+            System.out.println();
         }
         
         //imprimirNVeces("_", 20);        

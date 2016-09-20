@@ -76,7 +76,6 @@ public class Celda {
     }
 
     public boolean esArtefacto() {
-        boolean ret;
         switch (tipo) {
             case ARMA:
             case ARMADURA:

@@ -5,18 +5,17 @@
  */
 package Modelo;
 
+import utils.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import Utils.Utils;
-
 
 public class Laberinto {
 
     private Integer filas;
     private Integer columnas;
-    Double pct_enemigo = Math.random() / 2;
+    Double pct_enemigo = Math.random() * 2;
     List<Integer> niveles_enemigo = new ArrayList<>();
     Celda[][] celdas;
     private Celda inicio;
@@ -25,6 +24,14 @@ public class Laberinto {
     List<Entidad> enemigos = new ArrayList<>();
     List<Artefacto> artefactos = new ArrayList<>();
 
+    private Integer Myrandom(Integer ini, Integer fin) {
+        List<Integer> lista = new ArrayList<>();
+        for (int i = ini; i <= fin; i += 1) {
+            lista.add(i);
+        }
+        Collections.shuffle(lista);
+        return lista.get(0);
+    }
 
     public Laberinto(Integer m, Integer n, Celda.Tipo tipo) {
         filas = 2 * m + 1;
@@ -54,13 +61,12 @@ public class Laberinto {
                 celdas[i][j].setTipo(tipo);
             }
         }
-
     }
 
     public void pintarCelda(Integer x, Integer y, Celda.Tipo tipo) {
         celdas[x][y].setTipo(tipo);
     }
-
+    
     public void mostrarLaberinto() {
         for (int i = 0; i < getFilas(); i++) {
             for (int j = 0; j < getColumnas(); j++) {
@@ -160,13 +166,6 @@ public class Laberinto {
         }
     }
 
-    /**
-     * Borra un artefacto del laberinto en la posicion (x, y)
-     *
-     * @param  x    la posicion en x
-     * @param  y    la posicion en y
-     * @return      un artefacto o null en caso de error
-     */
     public Artefacto extraerArtefacto(Integer x, Integer y) {
         Celda celda = getCelda(x, y);
 
@@ -194,6 +193,18 @@ public class Laberinto {
             }
         }
         return null;
+    }
+    
+    
+    public Entidad buscarEnemigo(Integer x,Integer y){
+        Iterator<Entidad> iterator = enemigos.iterator();        
+        while (iterator.hasNext()) {
+            Entidad e=iterator.next();        
+                if(e.getX() == x && e.getY()==y){
+                    return e;
+                }                
+        }  
+        return null;        
     }
     
     public Entidad extrarEnemigo(Integer x,Integer y){
@@ -281,13 +292,10 @@ public class Laberinto {
 
     //----------
     public void moverEnemigos(int av_X,int av_Y) {
-
-        char[] movsEnemigo = new char[10];
-
-        movsEnemigo[1] = 'D';  //DERECHA
-        movsEnemigo[2] = 'A';  //IZQUIERDA
-        movsEnemigo[3] = 'S';  //ABAJO
-        movsEnemigo[4] = 'W';  //ARRIBA
+        // 1  DERECHA
+        // 2 IZQUIERDA
+        // 3 ABAJO
+        // 4 ARRIBA
 
         Integer respuesta =-1;
         Integer posX,posY;
@@ -332,7 +340,7 @@ public class Laberinto {
                 }
             }
             if (respuesta != -1) {
-                cambiarTipo(posX, posY, Celda.Tipo.AFUERA);
+                cambiarTipo(posX, posY, Celda.Tipo.ADENTRO);
                 cambiarTipo(enemigos.get(i).getX(), enemigos.get(i).getY(), Celda.Tipo.ENEMIGO);
             }            
         }

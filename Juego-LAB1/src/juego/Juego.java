@@ -11,60 +11,98 @@ import java.util.List;
 import java.util.Scanner;
 import Modelo.*;
 import Controlador.*;
-import Utils.Utils;
 
 /**
  *
- * @author 
+ * @author
  */
 public class Juego {
-    private static Laberinto laberinto ;
-     private static String[] movs = new String[10];
 
-    private static void iniciarBatalla(Avatar a,Integer newX,Integer newY){
-        Entidad e =laberinto.extrarEnemigo(newX, newY);
-        String sufij="";
-        while (true){
+    private static Laberinto laberinto;
+    private static String[] movs = new String[10];
+
+    private static Integer Myrandom(Integer ini, Integer fin) {
+        List<Integer> lista = new ArrayList<>();
+        for (int i = ini; i <= fin; i += 1) {
+            lista.add(i);
+        }
+        Collections.shuffle(lista);
+        return lista.get(0);
+    }
+
+    private static int iniciarBatalla(Avatar a, Integer newX, Integer newY) {
+        Entidad e = laberinto.buscarEnemigo(newX, newY);/*Aqui solo deberia buscar al enemigo*/
+        String sufij = "";
+
+        System.out.println("\nIngrese -atacar / -usar # / -huir ");
+        while (true) {
             a.imprimirEntidad();
             e.imprimirEntidad();
             Scanner sc = new Scanner(System.in);
-            String instruccion = sc.nextLine();
-            if (instruccion.length() >= movs[6].length()) 
+            String instruccion = sc.nextLine().toUpperCase();
+            if (instruccion.length() >= movs[6].length()) {
                 sufij = instruccion.subSequence(0, movs[6].length()).toString();
-                
-            if (instruccion.compareTo("atacar")==0){
+            }
+
+            if (instruccion.compareTo("ATACAR") == 0) {
+                /*if(e.getVida()<=(a.getArma().getDanoMax()-e.getArmadura().getDefensa())){
+                    //El enemigo se cura y usa el arma del saco
+                    e.getSaco().getArtefacto(0);
+                    e.getSaco().getArtefacto(1);
+                }*/
                 a.atacar(e);
-                e.atacar(a);                
+                if (e.getVida() == 0) {
+                    e = laberinto.extrarEnemigo(newX, newY);
+                    /*Luego de ganar la batalla debo obtener el artefacto del enemigo*/
+                    laberinto.addArtefacto(e.botarAleatorio());
+                    System.out.println("GANO LA BATALLA");
+                    return 0;  //good 
+                }
+                e.atacar(a);
+                if (a.getVida() == 0) {
+                    System.out.println("PERDIO EL JUEGO");
+                    return 3;  // endGame
+                }
             } else if (sufij.compareTo(movs[6]) == 0) {
                 Integer n = Integer.parseInt(instruccion.replace(movs[6], "").trim().toString());
                 a.usar(n);
-            } else if (instruccion.compareTo("huir")==0)
-                break;
-            
-            if (e.getVida()==0){
-                laberinto.extrarEnemigo(newX, newY);
-                laberinto.addArtefacto(e.botarAleatorio());
+            } else if (instruccion.compareTo("HUIR") == 0) {
+                return 0;
             }
+
         }
     }
-    
-    
-     private static Integer procesarInstruccion(String cadActual,Avatar avatar) {
-        Integer respuesta = -1;       
-        String sufij="";
+
+    public final static void clearConsole() {
+        try {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows")) {
+                Runtime.getRuntime().exec("cls");
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (final Exception e) {
+            //  Handle any exceptions.
+        }
+    }
+
+    private static Integer procesarInstruccion(String cadActual, Avatar avatar) {
+        Integer respuesta = -1;
+        String sufij = "";
         //enter
-        if (cadActual.length() >= movs[6].length()) {
+        /*if (cadActual.length() >= movs[6].length()) {
             sufij = cadActual.subSequence(0, movs[6].length()).toString();
         } else {
             return -1;
-        }  //descomentar para el usar
+        }*/  //descomentar para el usar
 
         if (cadActual.compareTo(movs[0]) == 0) {
             return 3;
         }
         if (cadActual.compareTo(movs[1]) == 0) {
             avatar.setDireccion('E');
-            respuesta = laberinto.comprobarTipo(avatar.getX(),avatar.getY() + 1);
+            respuesta = laberinto.comprobarTipo(avatar.getX(), avatar.getY() + 1);
             if (respuesta != -1) {
                 avatar.setY((Integer) (avatar.getY() + 1));
             }
@@ -126,37 +164,37 @@ public class Juego {
             if (laberinto.getCelda(newX, newY).getTipo()==Celda.Tipo.ENEMIGO){
                 // es enemigo
                 // batalla que deberia 
-                iniciarBatalla(avatar,newX,newY); 
-                return 0;
+                return iniciarBatalla(avatar, newX, newY);
             }
-                
-                
-        } else if (sufij.compareTo(movs[6]) == 0) {
+
+        }
+        /*else if (sufij.compareTo(movs[6]) == 0) {
             Integer n = Integer.parseInt(cadActual.replace(movs[6], "").trim().toString());
             respuesta = avatar.usar(n);
-        }//descomentar para el usar
+        }*///descomentar para el usar
         if (respuesta < 0) {
             return respuesta;  // si interactua con un objeto que no existe
-                               // al moverme hacia una celda inválida
-                               // si se ingresa un comando que no está en las instrucciones
+            // al moverme hacia una celda inválida
+            // si se ingresa un comando que no está en las instrucciones
         }
         return 0;
     }
-     
+
     public static void main(String[] args) {
-        List<Laberinto> mundo= new ArrayList<>();
-        GestorLaberinto gestor= new GestorLaberinto();
-        Integer cantMinMundos=3,cantMaxMundos=7,limiteInicial=20,limiteFinal=25;
-        Integer cantMundos=Utils.randInt(cantMinMundos,cantMaxMundos);
-        for (int i=0;i<cantMundos;i++){
-            Integer fils=Utils.randInt(limiteInicial,limiteFinal);
-            Integer cols=Utils.randInt(limiteInicial,limiteFinal);
-            Laberinto lab=gestor.crear(fils,cols);
-            lab.añadirElementos(i+1);        
+        List<Laberinto> mundo = new ArrayList<>();
+        GestorLaberinto gestor = new GestorLaberinto();
+        Integer cantMinMundos = 3, cantMaxMundos = 7, limiteInicial = 20, limiteFinal = 25;
+        Integer cantMundos = Myrandom(cantMinMundos, cantMaxMundos);
+        for (int i = 0; i < cantMundos; i++) {
+            Integer fils = Myrandom(limiteInicial, limiteFinal);
+            Integer cols = Myrandom(limiteInicial, limiteFinal);
+            Laberinto lab = gestor.crear(fils, cols);
+            lab.añadirElementos(i + 1);
             mundo.add(lab);
-            limiteInicial+=1;limiteFinal+=1;
+            limiteInicial += 1;
+            limiteFinal += 1;
         }
-        
+
         movs[0] = "E";  //SALIR
         movs[1] = "D";  //DERECHA
         movs[2] = "A";  //IZQUIERDA
@@ -164,30 +202,33 @@ public class Juego {
         movs[4] = "W";  //ARRIBA
         movs[5] = "Q";  //INTERACTUAR
         movs[6] = "U";  //USAR N #, N ES LA POSICION DE UN ARTEFACTO EN EL SACO
-        //descomentar para el usar
-        Integer myWorld=0;
-        int tamDibujadorX=15,tamDibujadorY=15;
-        Dibujador dib= new Dibujador(tamDibujadorX,tamDibujadorY);
-        laberinto= mundo.get(0);
-        Avatar a= new Avatar(laberinto.getInicio().getX()
-                              ,laberinto.getInicio().getY()
-                                ,"Atlas",200);
-        String mensaje="";        
+
+        Integer myWorld = 0;
+        int tamDibujadorX = 15, tamDibujadorY = 15;
+        Dibujador dib = new Dibujador(tamDibujadorX, tamDibujadorY);
+        laberinto = mundo.get(0);
+        Avatar a = new Avatar(laberinto.getInicio().getX(), laberinto.getInicio().getY(), "Atlas", 200);
+        String mensaje = "";
         int decision = 0;
         String inicio = "";
         while (true) {
+            clearConsole();
+            //Runtime.getRuntime().exec("cls");
             if (decision == 0) {
                 decision = 1;
-                inicio=dib.imprimir_historia(decision);
-            } else if ((inicio.compareTo("SI") == 0) || (inicio.compareTo("si") == 0)|| (inicio.compareTo("Si") == 0)) {
+                inicio = dib.imprimir_historia(decision).toUpperCase();
+            } else if (inicio.compareTo("SI") == 0) {
                 System.out.println("Mundo N°" + (myWorld + 1) + " de " + cantMundos);
-                dib.Dibujar(laberinto, a, mensaje,movs );
+                dib.Dibujar(laberinto, a, mensaje, movs);
                 Scanner sc = new Scanner(System.in);
                 String instruccion = sc.nextLine();
                 Integer respuesta = procesarInstruccion(instruccion, a);
-                //direccionRandom = Utils.randInt(1,4); //----------
-                
-                laberinto.moverEnemigos(a.getX(),a.getY()); //----------
+                if (a.getVida() == 0) {
+                    break;
+                }
+                //direccionRandom = Myrandom(1,4); //----------
+
+                laberinto.moverEnemigos(a.getX(), a.getY()); //----------
                 if (respuesta == 2 && myWorld == cantMundos - 1) {  // ganó (fin del juego)
                     //imprimimos victoria
                     dib.win();
@@ -219,10 +260,9 @@ public class Juego {
                 } else {
                     mensaje = "";
                 }
-                
             } else {
                 break;
             }
-        }      
-    }    
+        }
+    }
 }
